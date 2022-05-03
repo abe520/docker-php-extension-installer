@@ -31,8 +31,12 @@ jobs:
             ${{ secrets.DOCKER_HUB_USERNAME }}/php8
           # generate Docker tags based on the following events/attributes
           tags: |
+            type=ref,event=branch
+            type=ref,event=pr
             type=semver,pattern={{version}}
-            type=raw,value=latest,enable=${{ !contains(github.ref, 'master') }}
+            type=semver,pattern={{major}}.{{minor}}
+            # set latest tag for default branch
+            type=raw,value=latest,enable={{is_default_branch}}
       -
         name: Set up QEMU
         uses: docker/setup-qemu-action@v1
@@ -57,4 +61,6 @@ jobs:
           context: .
           file: ./Dockerfile-php8
           push: true
-          
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+
