@@ -28,10 +28,9 @@ jobs:
         uses: docker/metadata-action@v3
         with:
           images: |
-            ${{ secrets.DOCKER_HUB_USERNAME }}/php8
+            ${{ secrets.DOCKER_HUB_USERNAME }}/php8:latest
           # generate Docker tags based on the following events/attributes
-          tags: |
-            type=raw,value=latest
+
       -
         name: Set up QEMU
         uses: docker/setup-qemu-action@v1
